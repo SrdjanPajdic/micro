@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+        <script src="../Micro.js"></script>
+        <script src="../Pubsub.js"></script>
+        <script src="../Router.js"></script>
+        <script src="../Tpl.js"></script>
+</head>
+<body>
+    <div id="app">
+        
+    </div>
+    
+    <script>
+        console.log(window.location.href)
+        new Micro({
+            config: {
+                container: '#app',
+                tplDir: '/micro/hello_world/'
+            },
+            router: [{
+                match: '/',
+                title: 'Home Page',
+                src: "home.html"
+            }]
+        });
+
+    </script>
+</body>
+</html>

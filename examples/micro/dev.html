@@ -1,0 +1,132 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="logo.ico">
+        <link rel="stylesheet" href="style.css">
+        <!-- Place this tag in your head or just before your close body tag. -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </head>
+    <body>
+        
+        <header>
+            <div class="navbar-fixed">
+                <nav>
+                    
+                    <div class="nav-wrapper">
+                        <a data-activates="navig"  class="button-collapse top-nav full ">
+                            <i class="material-icons">menu</i>
+                        </a>
+                        
+                        <!-- main navigation -->
+                        <ul class="right">
+                            <li><a micro-link="/">Guide</a></li>
+                            <li><a micro-link="/examples">Examples</a></li>
+                            <!--<li><a micro-link="/showcase">Showcase</a></li>-->
+                        </ul>
+                    </div>
+                </nav>    
+            </div>
+
+            
+            <ul id="navig" class="side-nav fixed">          
+                <li class="logo">
+                    <h3>MICRO</h3>
+                </li>
+                <li>
+                    <!-- navigation container -->
+                    <ul id="subnav">
+                        
+                    </ul>
+                </li>
+            </ul>
+        </header>
+        
+        <main>
+            <!-- main app container -->
+            <div class="col s12 m9 l10" id="app">
+                
+            </div> 
+        </main> 
+
+        <script src="Micro.js"></script>
+        <script src="Pubsub.js"></script>
+        <script src="Router.js"></script>
+        <script src="Tpl.js"></script>
+        <script type="text/javascript" src="jquery_and_materialize.css.js"></script>
+
+        <script type="text/javascript">
+        
+            var micro;
+
+            $( document ).ready(function(){
+                
+                micro = new Micro({
+                    config: {
+                        container: '#app',
+                        tplDir: '/tpl',
+                        cache: false,
+                        linkActiveCls: 'nav-active', // default: micro-link-active 
+                        enterAnimation: 'fadeIn', // available 
+                        animationDuration: 0.6,
+                        on: {
+                            beforerender: function(route, tpl){
+                                //console.log('before-render', route, tpl);
+                                // do something here before page render
+                            },
+                            render: function(route, tpl){
+                                //console.log('render ', route, tpl);
+                                // do something here after page render
+                            }
+                        },
+                    },
+                    router: [{
+                        match: '/',
+                        title: 'Guide',
+                        data: {
+                            sample: 'Guide'
+                        },
+                        tpl: [{
+                            src: "guide.html"
+                        },
+                        {
+                            src: "guide-nav.html",
+                            enterAnimation: 'fadeInLeft',
+                            container: '#subnav'
+                        }]
+                    },{
+                        match: '/examples',
+                        title: 'Examples',
+                        data: {
+                            sample: 'Examples'
+                        },
+                        tpl: [{
+                            src: "examples.html"
+                        },
+                        {
+                            src: "examples-nav.html",
+                            enterAnimation: 'fadeInLeft',
+                            container: '#subnav'
+                        }]
+                    }]
+            
+                });
+
+                $('.button-collapse').sideNav({'edge': 'left'});
+                
+            });
+
+            function scrollNav(el){console.log(document.getElementById(el))
+                document.getElementById(el).scrollIntoView();
+                var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; 
+                scrollTo(0, scroll-84);
+                return false;
+            } 
+
+               
+        </script>
+        
+    </body>
+    </html>

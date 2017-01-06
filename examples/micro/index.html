@@ -1,0 +1,139 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Document</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="icon" href="img/logo.ico">
+        <link rel="stylesheet" href="style.css">
+        <!-- Place this tag in your head or just before your close body tag. -->
+        <script async defer src="https://buttons.github.io/buttons.js"></script>
+    </head>
+    <body>
+        
+        <header>
+            <div class="navbar-fixed">
+                <nav>
+                    
+                    <div class="nav-wrapper">
+                        <a data-activates="navig"  class="button-collapse top-nav full ">
+                            <i class="material-icons">menu</i>
+                        </a>
+                        
+                        <!-- main navigation -->
+                        <ul class="right">
+                            <li style="padding: 10px;">
+                                <a class="github-button"
+                                    href="https://github.com/sgoran/micro" 
+                                    data-style="mega" 
+                                    data-count-href="/sgoran/micro/stargazers" 
+                                    data-count-api="/repos/sgoran/micro#stargazers_count" 
+                                    data-count-aria-label="# stargazers on GitHub" 
+                                    aria-label="Star sgoran/micro on GitHub"></a>
+                            </li>
+                            <li><a micro-link="/">Guide</a></li>
+                            <li><a micro-link="/examples">Examples</a></li>
+                            <!--<li><a micro-link="/showcase">Showcase</a></li>-->
+                        </ul>
+                    </div>
+                </nav>    
+            </div>
+
+            
+            <ul id="navig" class="side-nav fixed">          
+                <li class="logo">
+                    <h3>MICRO</h3>
+                </li>
+                <li>
+                    <!-- navigation container -->
+                    <ul id="subnav">
+                        
+                    </ul>
+                </li>
+            </ul>
+        </header>
+        
+        <main>
+            <!-- main app container -->
+            <div class="col s12 m9 l10" id="app">
+                
+            </div> 
+        </main> 
+
+        <script src="https://unpkg.com/micro-spa@latest"></script>
+        <script type="text/javascript" src="jquery_and_materialize.css.js"></script>
+
+        <script type="text/javascript">
+        
+            var micro;
+
+            $( document ).ready(function(){
+                
+                micro = new Micro({
+                    config: {
+                        container: '#app',
+                        tplDir: '/tpl',
+                        cache: true,
+                        linkActiveCls: 'nav-active', // default: micro-link-active 
+                        enterAnimation: 'fadeIn', // available 
+                        animationDuration: 0.9
+                    },
+                    router: [{
+                        match: '/',
+                        title: 'Guide',
+                        data: {
+                            sample: 'Guide'
+                        },
+                        tpl: [{
+                            src: "guide.html"
+                        },
+                        {
+                            src: "guide-nav.html",
+                            enterAnimation: 'fadeInLeft',
+                            container: '#subnav'
+                        }]
+                    },{
+                        match: '/examples',
+                        title: 'Examples',
+                        data: {
+                            sample: 'Examples'
+                        },
+                        tpl: [{
+                            src: "examples.html"
+                        },
+                        {
+                            src: "examples-nav.html",
+                            enterAnimation: 'fadeInLeft',
+                            container: '#subnav'
+                        }]
+                    }]
+            
+                });
+
+                $('.button-collapse').sideNav({'edge': 'left'});
+
+            });
+
+            function scrollNav(el){console.log(document.getElementById(el))
+                document.getElementById(el).scrollIntoView();
+                var scroll = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0; 
+                scrollTo(0, scroll-84);
+                return false;
+            }  
+
+        </script>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-42619681-4', 'auto');
+            ga('send', 'pageview');
+
+        </script>
+        
+    </body>
+    </html>
+        
+      

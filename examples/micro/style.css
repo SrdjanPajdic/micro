@@ -1,0 +1,141 @@
+@import url(https://fonts.googleapis.com/css?family=Arimo:400,400italic,700,700italic);
+@import url(https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.8/css/materialize.min.css);
+@import url(http://fonts.googleapis.com/icon?family=Material+Icons);
+
+strong {
+  font-weight: bold;
+}
+.required{
+    width: 16px; 
+    float: right;
+    color: green;
+}
+pre{
+    background-color: #F9F9F9;
+    border-radius: 3px;
+}
+h4, p, div{
+    color: #525252;
+}
+.nav-active{
+    background-color: #F5F5F5;
+}
+nav{
+    background-color: #ffffff !important;
+}
+nav .button-collapse { 
+    color: #525252;
+}
+nav ul li a{
+      color: #525252;
+}
+html, body{
+    height: 100%;
+    font-family: 'Arimo', sans-serif;
+}
+ul.side-nav.fixed li.logo {
+    text-align: center;
+    height: 172px;
+    padding: 23px;
+}
+#nav-mobile li.search {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 120px;
+  margin-top: 1px;
+  padding: 1px 0 0 0;
+  z-index: 2;
+}
+a{
+    cursor: pointer
+}
+
+#subnav{
+    margin-top: 18px;
+}
+#nav-mobile li.search .search-wrapper {
+  margin: 0 12px;
+  transition: margin .25s ease;
+}
+
+main{
+    padding-left: 300px;
+}
+.logo{
+    padding-top: 42px!important;
+    background-color: #4285f4;
+}
+.logo h3{
+  font-weight: bold;
+  color: #fff;
+  font-size: 45px;
+
+}
+@media only screen and (max-width: 992px){ 
+    main{
+    padding-left: 0px;
+}
+}
+/*
+.brand-logo{
+    margin-left: 15px; 
+}
+#body{
+    padding: 0px !important;
+}
+
+
+#app{ 
+    display: flex;
+    align-items: stretch;
+    flex-direction: row;
+    
+}*/
+
+
+
+
+/*.example-list{
+    width: 300px;
+}
+main{
+    display: flex !important; 
+    flex-direction: row;
+}
+#nav{
+    width: 250px;
+    padding: 10px;
+}
+#app{
+    width: 100%;
+    display: flex;
+}
+#nav ul{
+    margin-top: 0px;
+    padding-top: 0px;
+}
+.mdl-list__item{
+    cursor: pointer;
+    padding: 0px;
+    color: #7f8c8d;
+}*/
+.section, .section2, .section3{
+    height: 100%;
+    color: #fff;
+    width: 100%;
+    text-align: center;
+    align-items: stretch;
+    background-color: #4DB6AC;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section2{
+    background-color: #FF8A65;
+}
+
+.section3{
+    background-color: #4DD0E1;
+}

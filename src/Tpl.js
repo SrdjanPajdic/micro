@@ -8,9 +8,7 @@
         var me = this;
         this.props = props;
         this.events = events;
-       // me.container = this.props.container;
-        this.props.enterAnimation;
-
+       
         if(this.props.enterAnimation && this.props.enterAnimation!='')
             this.embedAnimations();
         
@@ -23,108 +21,111 @@
          */
         tplCache: {},
 
-        
-
         /**
-         * Do XHR for template and call this.render
+         * Get tpl with XHR and call this.render
          */
-        loadTpl: function(page){
+        load: function(route){
             
             var me = this; 
-            this.activePage = page;
+            me.activeRoute = route;
+
+            if(Array.isArray(route.tpl))
+                route.tpl.forEach(function(tpl){
+                    me.loadFile(tpl);
+                });
+            else
+                me.loadFile(route);
+
             
 
-            document.getElementById(me.props.container).className = "";
-            document.getElementById(me.props.container).style.opacity = 0;
+        },
 
+        loadFile: function(tpl){
+            
+            var me = this;
+    
             me.events.fire('beforerender', {
-                page: this.activePage
+                route: me.activeRoute,
+                tpl: tpl
             });
 
-            if(this.isRouteCached(page)){
-                this.render(this.tplCache[page.tpl])
+            // treba dovrsiti ovo za animacije malo bolje
+            // tako da radi dobro i kad nije fade efekat
+            var container = document.querySelector(me.getContainerSelector(tpl));
+            container.className = "";
+            container.style.opacity = 0;
+
+            if(me.isRouteCached(tpl)){
+                me.render(me.tplCache[tpl.src], tpl);
                 return;
             }
 
-            tplFile = this.props.tplDir+'/'+page.tpl;
-
+            var tplFile = me.props.tplDir+'/'+tpl.src;
             var oReq = new XMLHttpRequest();
 
             oReq.addEventListener("load", function(){
                 
-                if(me.props.cache || page.cache)
-                    me.cacheRoute(page, oReq.responseText);
+                if(me.props.cache || tpl.cache)
+                    me.cacheRoute(tpl, oReq.responseText);
 
-                me.render(oReq.responseText);
+                me.render(oReq.responseText, tpl);
 
             });
 
             oReq.open("GET", tplFile, true);
 
             oReq.send();
-
         },
 
+        getContainerSelector: function(tpl){
+            return tpl.container || this.props.container
+        },
         /**
          * Returns boolean
          */
-        isRouteCached: function(page){
-            return this.tplCache && this.tplCache.hasOwnProperty(page.tpl);
+        isRouteCached: function(tpl){
+            return this.tplCache && this.tplCache.hasOwnProperty(tpl.src);
         },
 
         /**
          * Cache tpl
          */
-        cacheRoute: function(page, data){
-            this.tplCache[page.tpl] = data;
+        cacheRoute: function(tpl, data){
+            this.tplCache[tpl.src] = data;
         },
         
         /**
          * Main render function 
          */
-        render: function(html){ 
+        render: function(html, tpl){ 
+            
             var me = this;
-            var data = (this.activePage.data || this.props.data || {});
-                
-            var source = this.parseTpl(html, data);
-                
-            this.replaceHtml(source); 
+            
+            var data = (this.activeRoute.data || this.props.data || {});
+            var source = this.parse(html, data);
+
+            this.replaceHtml(source, me.getContainerSelector(tpl) ); 
+            this.animate(tpl);    
 
             setTimeout(function(){
                 me.events.fire('render', {
-                    page: me.activePage
+                    route: me.activeRoute,
+                    tpl: tpl
                 });
             }, 0);
-            
-            this.animate();    
 
         },
 
         /**
-         * Should be faster than innerHTML
+         * need to finish this
          */
-        replaceHtml: function(html) { 
+        replaceHtml: function(html, selector) {
+
             var me = this;
             //document.getElementById(me.props.container).className = "animated fadeOut";
-
-            //setTimeout(function() {
-                
-                document.getElementById(me.props.container).innerHTML = html;    
-            //}, 1300);
+            document.querySelector(selector).innerHTML = html;    
             
-
             return;
-
-
-
-            var oldEl = (typeof this.props.container === "string" ? document.getElementById(this.props.container) : this.props.container);
-            if(oldEl==null) 
-                return;
-                
-            var newEl = oldEl.cloneNode(false);
-            //console.log(newEl, html)
-            newEl.innerHTML = html;
-            oldEl.parentNode.replaceChild(newEl, oldEl);
 
         },
 
@@ -132,7 +133,7 @@
          * Mustache replace
          * Should work with nested data/objects like {{data.item}}
          */
-        parseTpl: function(tpl, data) { 
+        parse: function(tpl, data) { 
 
             return tpl.replace((RegExp("{{\\s*([a-z0-9_][.a-z0-9_]*)\\s*}}", "gi")), function (tag, k) {
 
@@ -150,14 +151,42 @@
 
         /**
          * Executes after tpl is added
+         * Available animations are 
+            'fadeIn'
+            'fadeInDown'
+            'fadeInDownBig'
+            'fadeInLeft'
+            'fadeInLeftBig'
+            'fadeInRight'
+            'fadeInRightBig'
+            'fadeInUp'
+            'fadeInUpBig
          */
-        animate: function(){
+        animate: function(tpl){
+            var animations = [
+            'fadeIn', 
+            'fadeInDown',
+            'fadeInDownBig',
+            'fadeInLeft',
+            'fadeInLeftBig',
+            'fadeInRight',
+            'fadeInRightBig',
+            'fadeInUp',
+            'fadeInUpBig'
+            ];
             var me = this;
+
             setTimeout(function(){
-                var animation = me.activePage.enterAnimation ||  me.props.enterAnimation;
-                if(animation)
-                    document.getElementById(me.props.container).className = "animated "+animation;
+                
+                var animation = tpl.enterAnimation ||  me.props.enterAnimation;
+                
+                if(animation && animations.indexOf(animation)>-1)
+                    document.querySelector(me.getContainerSelector(tpl)).className = "animated "+animation;
+                else
+                    document.querySelector(me.getContainerSelector(tpl)).style.opacity = 1;
+
             }, 0);
+            
         },
 
         /**
@@ -187,11 +216,5 @@
     
     if(typeof Micro === "function" && Micro.prototype.isMicro)
         Micro['Tpl'] = Tpl;
-    else if ( typeof module != 'undefined' && module.exports )
-	    module.exports = Tpl;
-    else if( typeof define == 'function' && define.amd )
-        define( function () { return Tpl; }); 
-    else
-        window.Tpl = Tpl;
     
 }(window, document));

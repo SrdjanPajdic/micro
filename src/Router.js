@@ -1,9 +1,9 @@
 ;(function (window, document){
     
-    function Router(pages, events){
+    function Router(routes, events){
         
         
-        this.pages = pages;
+        this.routes = routes;
         this.events = events;//= (Micro && Micro['Pubsub']) ? Micro['Pubsub']: false;
         var me = this;
 
@@ -19,10 +19,10 @@
 
             var me = this;
             
-            this.pages && this.pages.forEach(function(page) {
+            this.routes && this.routes.forEach(function(route) {
                 
-                if(me.doesMatch(page))
-                    me.events.fire('routeMatch', page);
+                if(me.doesMatch(route))
+                    me.events.fire('routeMatch', route);
                 
             });
             
@@ -34,25 +34,25 @@
          * Check if page object match
          * @to-do: This must be done much better
          */
-        doesMatch: function(page){
+        doesMatch: function(route){
 
             var urlPath = window.location.pathname;
             var match = false;
 
-            if(!page.match){
-                this.log(page.route+" rule has no callback");
+            if(!route.match){
+                this.log(route.route+' rule has no "match" rule');
                 return match;
             }
                 
 
-            var matchParams = page.match.split('/');
+            var matchParams = route.match.split('/');
             matchParams.shift();
 
             var urlParams = urlPath.split('/');
             urlParams.shift();
             
-            // should match exact route including "/" or "/page" etc
-            if(urlPath==page.match)
+            // should match exact route including "/" or "/route" etc
+            if(urlPath==route.match)
                 match = true;
             
             
@@ -70,9 +70,9 @@
         
         path: function(href){
             
-            if(window.location.pathname!=href){
+            if(window.location.pathname!=href)
              history.pushState({page: new Date().getTime()}, '',href);
-            }
+            
             this.invoke();
         },
         
@@ -84,11 +84,5 @@
 
     if(typeof Micro === "function" && Micro.prototype.isMicro)
          Micro['Router'] = Router;
-    else if ( typeof module != 'undefined' && module.exports )
-	    module.exports = Router;
-    else if( typeof define == 'function' && define.amd )
-        define( function () { return Router; }); 
-    else
-        window.Router = Router;
 
 }(window, document));
